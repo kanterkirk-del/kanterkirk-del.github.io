@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Travel Partners — Sand & Seas Travel</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d2137;
+    --ocean: #1a4a6e;
+    --teal: #2a7ea4;
+    --sand: #e8dcc8;
+    --gold: #c9a84c;
+    --gold-light: #e8cb7a;
+    --cream: #f7f3ec;
+    --white: #ffffff;
+    --text: #1a2635;
+    --text-muted: #4a5e72;
+    --card-bg: #ffffff;
+    --border: rgba(201,168,76,0.2);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--navy);
+    padding: 64px 40px 56px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 120%, rgba(42,126,164,0.35) 0%, transparent 70%);
+  }
+  .hero-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 5vw, 62px);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.1;
+    position: relative;
+    margin-bottom: 16px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+  .hero p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.65);
+    max-width: 520px;
+    margin: 0 auto;
+    font-weight: 300;
+    letter-spacing: 0.01em;
+    position: relative;
+  }
+
+  /* SEARCH + FILTER BAR */
+  .controls {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 40px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(13,33,55,0.06);
+  }
+  .search-wrap {
+    flex: 1;
+    min-width: 220px;
+    position: relative;
+  }
+  .search-wrap input {
+    width: 100%;
+    padding: 10px 16px 10px 40px;
+    border: 1px solid rgba(13,33,55,0.15);
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--cream);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-wrap input:focus { border-color: var(--teal); }
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+  .filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 8px 18px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.18s;
+    letter-spacing: 0.02em;
+  }
+  .filter-btn:hover { border-color: var(--teal); color: var(--teal); }
+  .filter-btn.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+  .count-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 11px;
+    font-weight: 500;
+    border-radius: 100px;
+    padding: 1px 7px;
+    margin-left: 5px;
+  }
+
+  /* SECTION HEADERS */
+  .section-header {
+    padding: 40px 40px 8px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .section-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--navy);
+    letter-spacing: -0.01em;
+  }
+  .section-header .rule {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--gold), transparent);
+  }
+  .section-header .section-count {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* GRID */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 16px 40px 40px;
+  }
+
+  /* CARD */
+  .card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(13,33,55,0.07);
+    transition: transform 0.22s, box-shadow 0.22s;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(13,33,55,0.12);
+  }
+  .card-image {
+    height: 160px;
+    overflow: hidden;
+    position: relative;
+    background: var(--navy);
+  }
+  .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s;
+  }
+  .card:hover .card-image img {
+    transform: scale(1.04);
+  }
+  .card-image .cat-pill {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(13,33,55,0.75);
+    backdrop-filter: blur(6px);
+    color: var(--gold-light);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+  .card-image .img-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.05em;
+    text-align: center;
+    padding: 16px;
+    background: var(--ocean);
+  }
+  .card-body {
+    padding: 18px 20px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .card-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    font-weight: 300;
+    flex: 1;
+    margin-bottom: 16px;
+  }
+  .card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--teal);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: gap 0.18s, color 0.18s;
+  }
+  .card:hover .card-cta {
+    color: var(--gold);
+    gap: 10px;
+  }
+  .card-cta svg { flex-shrink: 0; }
+
+  /* NO RESULTS */
+  .no-results {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+  }
+  .no-results p { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 300; }
+
+  /* HIDDEN */
+  .hidden { display: none !important; }
+
+  /* FOOTER */
+  .footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.45);
+    text-align: center;
+    padding: 24px 40px;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+  }
+  .footer a { color: var(--gold); text-decoration: none; }
+
+  @media(max-width: 600px) {
+    .hero { padding: 48px 24px 40px; }
+    .controls { padding: 16px 20px; }
+    .grid { padding: 12px 20px 32px; gap: 14px; }
+    .section-header { padding: 28px 20px 6px; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-logo">Sand &amp; Seas Travel &mdash; Cruise Planners</div>
+  <h1>Our <em>Travel Partner</em> Directory</h1>
+  <p>Explore our curated collection of world-class cruise lines, destinations, tours, and themed experiences.</p>
+</div>
+
+<div class="controls">
+  <div class="search-wrap">
+    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="searchInput" placeholder="Search vendors, destinations, themes…" oninput="filterCards()">
+  </div>
+  <div class="filters" id="filterBtns">
+    <button class="filter-btn active" data-cat="all" onclick="setFilter('all', this)">All <span class="count-badge" id="cnt-all">0</span></button>
+    <button class="filter-btn" data-cat="cruise" onclick="setFilter('cruise', this)">Cruises <span class="count-badge" id="cnt-cruise">0</span></button>
+    <button class="filter-btn" data-cat="destination" onclick="setFilter('destination', this)">Destinations <span class="count-badge" id="cnt-destination">0</span></button>
+    <button class="filter-btn" data-cat="tour" onclick="setFilter('tour', this)">Tours <span class="count-badge" id="cnt-tour">0</span></button>
+    <button class="filter-btn" data-cat="themed" onclick="setFilter('themed', this)">Themed <span class="count-badge" id="cnt-themed">0</span></button>
+    <button class="filter-btn" data-cat="other" onclick="setFilter('other', this)">More <span class="count-badge" id="cnt-other">0</span></button>
+  </div>
+</div>
+
+<div id="mainContent"></div>
+
+<div class="footer">
+  &copy; 2025 <a href="https://www.sandandseastravel.com">Sand &amp; Seas Travel</a> &mdash; Cruise Planners &mdash; Racine, WI
+</div>
+
+<script>
+const VENDORS = [
+  // CRUISES
+  {name:"AmaWaterways",cat:"cruise",desc:"Award-winning river cruises offering an authentic, in-depth travel experience through Europe's most storied waterways.",url:"https://www.sandandseastravel.com/microsite/1001",img:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80"},
+  {name:"American Cruise Lines",cat:"cruise",desc:"Experience panoramic views and breathtaking scenery on small American-built ships exploring the USA's rivers and coastlines.",url:"https://www.sandandseastravel.com/microsite/1002",img:"https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600&q=80"},
+  {name:"Avalon Waterways",cat:"cruise",desc:"There's only one point of view on an Avalon Waterways river cruise – the suite view, with wall-to-wall, floor-to-ceiling panoramic windows.",url:"https://www.sandandseastravel.com/microsite/1003",img:"https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&q=80"},
+  {name:"Azamara®",cat:"cruise",desc:"At Azamara®, the world is your oyster. Destination-immersive voyages for passionate travelers who love deeper travel.",url:"https://www.sandandseastravel.com/microsite/1004",img:"https://images.unsplash.com/photo-1548574505-5e239809ee19?w=600&q=80"},
+  {name:"Carnival Cruise Line",cat:"cruise",desc:"Discover what awaits on a Carnival cruise – onboard or ashore, there's no shortage of FUN for families and fun-seekers.",url:"https://www.sandandseastravel.com/microsite/1005",img:"https://images.unsplash.com/photo-1540541338287-41700207dee6?w=600&q=80"},
+  {name:"Celebrity Cruises®",cat:"cruise",desc:"From morning until night, endless activities and world-class dining aboard the most modern ships at sea.",url:"https://www.sandandseastravel.com/microsite/1006",img:"https://images.unsplash.com/photo-1612892483236-52d32a0e0ac1?w=600&q=80"},
+  {name:"Cruises",cat:"cruise",desc:"One of the greatest aspects of cruising is there's something for everyone – first-timers, families, luxury seekers, adventurers.",url:"https://www.sandandseastravel.com/microsite/1135",img:"https://images.unsplash.com/photo-1578894381163-e72c17f2d45f?w=600&q=80"},
+  {name:"Crystal",cat:"cruise",desc:"As your Crystal experts, we deliver ease and satisfaction walking you through every step and providing exclusive Crystal benefits.",url:"https://www.sandandseastravel.com/microsite/1184",img:"https://images.unsplash.com/photo-1514890547357-a9ee288728e0?w=600&q=80"},
+  {name:"Cunard® Line",cat:"cruise",desc:"Picture yourself on a Cunard® voyage, where each treasured moment aboard a legendary ocean liner is yours to spend however you please.",url:"https://www.sandandseastravel.com/microsite/1008",img:"https://images.unsplash.com/photo-1595954379670-7ea77e14ca98?w=600&q=80"},
+  {name:"Explora Journeys",cat:"cruise",desc:"Transforming ocean travel through a synergy of chic ships and immersive itineraries – discover further, travel deeper, linger longer.",url:"https://www.sandandseastravel.com/microsite/1168",img:"https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=600&q=80"},
+  {name:"Holland America Line",cat:"cruise",desc:"Breathtaking experiences await – from Alaska's glaciers to the Mediterranean's sun-drenched coasts aboard elegant mid-size ships.",url:"https://www.sandandseastravel.com/microsite/1010",img:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80"},
+  {name:"Hurtigruten",cat:"cruise",desc:"Hurtigruten holds the highest maritime reputation, sailing Norway's iconic coastline and remote polar regions since 1893.",url:"https://www.sandandseastravel.com/microsite/1011",img:"https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=600&q=80"},
+  {name:"HX — Hurtigruten Expeditions",cat:"cruise",desc:"Mindful adventures to awe-inspiring places: Iceland, Antarctica, the Galápagos, Alaska and more. Return home with deeper understanding.",url:"https://www.sandandseastravel.com/microsite/1190",img:"https://images.unsplash.com/photo-1551524163-58f94390bafe?w=600&q=80"},
+  {name:"Lindblad Expeditions",cat:"cruise",desc:"A Lindblad–National Geographic expedition is the most exhilarating overseas adventure – science-driven exploration on every voyage.",url:"https://www.sandandseastravel.com/microsite/1012",img:"https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=600&q=80"},
+  {name:"Norwegian Cruise Line®",cat:"cruise",desc:"Short getaway or best family vacation ever – Feel Free on Norwegian Cruise Line's innovative Freestyle Cruising.",url:"https://www.sandandseastravel.com/microsite/1013",img:"https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600&q=80"},
+  {name:"Oceania Cruises",cat:"cruise",desc:"Visit the world's most desirable ports aboard intimate ships renowned for the finest cuisine at sea.",url:"https://www.sandandseastravel.com/microsite/1014",img:"https://images.unsplash.com/photo-1452784444945-3f422708fe5e?w=600&q=80"},
+  {name:"Paul Gauguin Cruises",cat:"cruise",desc:"Paul Gauguin Cruises sails to some of the most remote and breathtaking places in French Polynesia and the South Pacific.",url:"https://www.sandandseastravel.com/microsite/1015",img:"https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=600&q=80"},
+  {name:"Ponant Cruises",cat:"cruise",desc:"Experience an underwater passenger lounge and unrivaled French elegance voyaging to Antarctica, the Arctic and beyond.",url:"https://www.sandandseastravel.com/microsite/1016",img:"https://images.unsplash.com/photo-1516912481808-3406841bd33c?w=600&q=80"},
+  {name:"Princess Cruises®",cat:"cruise",desc:"Transform your cruise into a journey with Princess Cruises® – ocean, Alaska, Caribbean, Europe and beyond.",url:"https://www.sandandseastravel.com/microsite/1017",img:"https://images.unsplash.com/photo-1467348733814-f9bf24b86a1b?w=600&q=80"},
+  {name:"Quark Expeditions",cat:"cruise",desc:"Make your polar exploration a reality. Quark Expeditions leads the way in Arctic and Antarctic adventures.",url:"https://www.sandandseastravel.com/microsite/1018",img:"https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=600&q=80"},
+  {name:"Regent Seven Seas Cruises®",cat:"cruise",desc:"The most inclusive luxury experience at sea – FREE Unlimited Shore Excursions in every port of call.",url:"https://www.sandandseastravel.com/microsite/1019",img:"https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=80"},
+  {name:"Royal Caribbean International®",cat:"cruise",desc:"There's no bolder option than a memory-maxing Royal Caribbean® adventure with the world's most innovative ships.",url:"https://www.sandandseastravel.com/microsite/1020",img:"https://images.unsplash.com/photo-1559825481-12a05cc00344?w=600&q=80"},
+  {name:"Sea Cloud Cruises",cat:"cruise",desc:"Sail sustainably and in luxury aboard authentic tall ships with sails hoisted by hand – a course entirely their own.",url:"https://www.sandandseastravel.com/microsite/1198",img:"https://images.unsplash.com/photo-1534447677768-be436bb09401?w=600&q=80"},
+  {name:"Seabourn",cat:"cruise",desc:"A Seabourn ship is like a private club – expansive open decks, elegant social spaces, and the personalized attention of an exceptional crew.",url:"https://www.sandandseastravel.com/microsite/1021",img:"https://images.unsplash.com/photo-1588880331179-bc9b93a8cb5e?w=600&q=80"},
+  {name:"SeaDream Yacht Club",cat:"cruise",desc:"Enjoy the SeaDream difference. It's Yachting, not cruising – ultra-intimate ships for the most discerning traveler.",url:"https://www.sandandseastravel.com/microsite/1022",img:"https://images.unsplash.com/photo-1601024445121-e5b82f020549?w=600&q=80"},
+  {name:"Silversea",cat:"cruise",desc:"Silversea's small luxury ships are designed for those who delight in the thrill of discovery in every corner of the globe.",url:"https://www.sandandseastravel.com/microsite/1023",img:"https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?w=600&q=80"},
+  {name:"Star Clippers",cat:"cruise",desc:"Uncover exciting deals from Star Clippers – sailing aboard the world's largest square-rigged sailing ships.",url:"https://www.sandandseastravel.com/microsite/1024",img:"https://images.unsplash.com/photo-1559494007-9f5847c49d94?w=600&q=80"},
+  {name:"The Ritz-Carlton Yacht Collection",cat:"cruise",desc:"Discover legendary Ritz-Carlton service and unmatched luxury aboard the world's finest intimate luxury yachts.",url:"https://www.sandandseastravel.com/microsite/1195",img:"https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=600&q=80"},
+  {name:"UnCruise Adventures",cat:"cruise",desc:"Experience adventure or river cruises with UnCruise Adventures – small ships reaching remote, off-the-beaten-path destinations.",url:"https://www.sandandseastravel.com/microsite/1026",img:"https://images.unsplash.com/photo-1547234935-80c7145ec969?w=600&q=80"},
+  {name:"Uniworld Boutique River Cruises",cat:"cruise",desc:"Elevating river cruising with carefully crafted excursions, five-star dining and outstanding service on the most beautiful ships afloat.",url:"https://www.sandandseastravel.com/microsite/1027",img:"https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=600&q=80"},
+  {name:"Viking",cat:"cruise",desc:"When you travel with Viking, every destination is made more interesting – river, ocean, and expedition voyages worldwide.",url:"https://www.sandandseastravel.com/microsite/1028",img:"https://images.unsplash.com/photo-1534430480872-3498386e7856?w=600&q=80"},
+  {name:"Virgin Voyages",cat:"cruise",desc:"Welcome to how Virgin does voyages – a 24/7 festival at sea where tranquility meets curiosity. No kids, no buffets, no limits.",url:"https://www.sandandseastravel.com/microsite/1029",img:"https://images.unsplash.com/photo-1570745894419-c0e18e9c673a?w=600&q=80"},
+  {name:"Windstar Cruises",cat:"cruise",desc:"Experience cruising that is 180 degrees from ordinary – small ships delivering yachting-style freedom to hidden harbors worldwide.",url:"https://www.sandandseastravel.com/microsite/1030",img:"https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?w=600&q=80"},
+
+  // DESTINATIONS
+  {name:"Abu Dhabi",cat:"destination",desc:"From untouched beaches and wildlife sanctuaries to championship golf, Abu Dhabi's 200+ islands offer surprising depth.",url:"https://www.sandandseastravel.com/microsite/1055",img:"https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=80"},
+  {name:"Alaska",cat:"destination",desc:"Blessed with thousands of square miles of unparalleled rugged natural beauty – glaciers, wildlife, and wilderness.",url:"https://www.sandandseastravel.com/microsite/1056",img:"https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=600&q=80"},
+  {name:"Alberta",cat:"destination",desc:"As vast as it is varied – from the Rockies to the prairies, Alberta is an exceptional four-season vacation destination.",url:"https://www.sandandseastravel.com/microsite/1057",img:"https://images.unsplash.com/photo-1508193638397-1c4234db14d8?w=600&q=80"},
+  {name:"AlUla",cat:"destination",desc:"An untold story – a land preserved by time and an awe-inspiring jewel of archaeological significance in Saudi Arabia.",url:"https://www.sandandseastravel.com/microsite/1187",img:"https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=600&q=80"},
+  {name:"Anchorage",cat:"destination",desc:"Overflowing with wide open spaces and city comforts, Anchorage opens the door to experiencing the best of Alaska.",url:"https://www.sandandseastravel.com/microsite/1197",img:"https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=600&q=80"},
+  {name:"Aruba",cat:"destination",desc:"Discover for yourself why Aruba is known as One Happy Island – pristine beaches, perfect weather, vibrant culture.",url:"https://www.sandandseastravel.com/microsite/1059",img:"https://images.unsplash.com/photo-1559825481-12a05cc00344?w=600&q=80"},
+  {name:"Australia",cat:"destination",desc:"From buzzing cities to vast desert, Australia's diversity and wealth of experiences – including the Great Barrier Reef – are yours to enjoy.",url:"https://www.sandandseastravel.com/microsite/1061",img:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80"},
+  {name:"Austria",cat:"destination",desc:"More than ever, Austria is a top destination for travelers seeking energy, culture, and charm – Vienna, Salzburg, the Alps.",url:"https://www.sandandseastravel.com/microsite/1062",img:"https://images.unsplash.com/photo-1516550893923-42d28e5677af?w=600&q=80"},
+  {name:"Bermuda",cat:"destination",desc:"Beyond the legendary pink sand beaches you'll find a mid-Atlantic island packed with a rare combination of history and adventure.",url:"https://www.sandandseastravel.com/microsite/1065",img:"https://images.unsplash.com/photo-1559825481-12a05cc00344?w=600&q=80"},
+  {name:"British Virgin Islands",cat:"destination",desc:"Uncover the unique character of each island in this unspoiled volcanic archipelago – sailing, diving, and tranquil escapes.",url:"https://www.sandandseastravel.com/microsite/1067",img:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80"},
+  {name:"Buenos Aires",cat:"destination",desc:"Latin America's capital of culture – tango, world-class cuisine, grand architecture, and something for every taste.",url:"https://www.sandandseastravel.com/microsite/1196",img:"https://images.unsplash.com/photo-1585464231875-d9ef1f5ad396?w=600&q=80"},
+  {name:"California",cat:"destination",desc:"From north to south, incredible vistas, iconic landmarks, and memorable experiences can be found around every turn.",url:"https://www.sandandseastravel.com/microsite/1160",img:"https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=600&q=80"},
+  {name:"Canada",cat:"destination",desc:"A sight for sore eyes in every season – go to relax, reset, and refresh your view in one of the world's greatest destinations.",url:"https://www.sandandseastravel.com/microsite/1156",img:"https://images.unsplash.com/photo-1565402503634-52f26aed9e96?w=600&q=80"},
+  {name:"Charleston, SC",cat:"destination",desc:"Fresh seafood, carriage rides on cobblestone streets, impressive museums, historical landmarks, and relaxing coastlines.",url:"https://www.sandandseastravel.com/microsite/1159",img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80"},
+  {name:"Chile",cat:"destination",desc:"From mountains and volcanoes to beautiful sandy beaches – exploring Chile offers some of the most dramatic scenery on Earth.",url:"https://www.sandandseastravel.com/microsite/1069",img:"https://images.unsplash.com/photo-1451440063999-77a8b2960d2b?w=600&q=80"},
+  {name:"Colombia",cat:"destination",desc:"The cultural and geographical richness of Colombia offers visitors unique and authentic encounters unlike anywhere else.",url:"https://www.sandandseastravel.com/microsite/1070",img:"https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=600&q=80"},
+  {name:"Costa Rica",cat:"destination",desc:"\"Pura Vida\" – full of life. Adventure and wonder await in one of the world's most biodiverse destinations.",url:"https://www.sandandseastravel.com/microsite/1172",img:"https://images.unsplash.com/photo-1518638150340-f706e86654de?w=600&q=80"},
+  {name:"Croatia",cat:"destination",desc:"Croatia has secured its spot as the Adriatic's rising star with crystalline seas, medieval walled cities, and island-hopping adventures.",url:"https://www.sandandseastravel.com/microsite/1071",img:"https://images.unsplash.com/photo-1555990538-1ebf85f21ce0?w=600&q=80"},
+  {name:"Denmark",cat:"destination",desc:"Welcome to Denmark – the happiest place on Earth, with design culture, fairy-tale castles, and thriving culinary scene.",url:"https://www.sandandseastravel.com/microsite/1073",img:"https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?w=600&q=80"},
+  {name:"Destinations of the World",cat:"destination",desc:"Explore our favorite destinations that are a must on your travel wish list – curated inspiration from every corner of the globe.",url:"https://www.sandandseastravel.com/microsite/1137",img:"https://images.unsplash.com/photo-1452441671381-6196a0ce0f6b?w=600&q=80"},
+  {name:"Dominican Republic",cat:"destination",desc:"Known for warm and hospitable people, astounding nature, intriguing history and rich culture at every turn.",url:"https://www.sandandseastravel.com/microsite/1074",img:"https://images.unsplash.com/photo-1551524163-58f94390bafe?w=600&q=80"},
+  {name:"Dubai",cat:"destination",desc:"Get ready to be amazed by Dubai – record-breaking architecture, world-class shopping, and desert adventures await.",url:"https://www.sandandseastravel.com/microsite/1075",img:"https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=80"},
+  {name:"Fiji",cat:"destination",desc:"Discover the beauty that awaits – colorful coral reefs, friendly locals, overwater bungalows, and breathtaking island scenery.",url:"https://www.sandandseastravel.com/microsite/1076",img:"https://images.unsplash.com/photo-1559825481-12a05cc00344?w=600&q=80"},
+  {name:"Finland",cat:"destination",desc:"Vast green forests, beautiful Baltic islands, windswept arctic fells, and thousands of blue lakes – Finland enchants all seasons.",url:"https://www.sandandseastravel.com/microsite/1077",img:"https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=600&q=80"},
+  {name:"Flanders — Belgium",cat:"destination",desc:"While Flanders is small, give yourself plenty of time to get happily lost in medieval cities, chocolate shops, and brewery culture.",url:"https://www.sandandseastravel.com/microsite/1078",img:"https://images.unsplash.com/photo-1491557345352-5929e343eb89?w=600&q=80"},
+  {name:"Florida",cat:"destination",desc:"You could be here. Sun-drenched beaches, thrilling theme parks, vibrant nightlife, and the Everglades all await.",url:"https://www.sandandseastravel.com/microsite/1171",img:"https://images.unsplash.com/photo-1548574505-5e239809ee19?w=600&q=80"},
+  {name:"Ft. Lauderdale",cat:"destination",desc:"Sunny days, scenic waterways, and attractions of all types to enjoy in Greater Fort Lauderdale – gateway to the Caribbean.",url:"https://www.sandandseastravel.com/microsite/1079",img:"https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600&q=80"},
+  {name:"Germany",cat:"destination",desc:"A land of a thousand possibilities – romantic castles, Oktoberfest, cutting-edge cities, and the Black Forest.",url:"https://www.sandandseastravel.com/microsite/1080",img:"https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=600&q=80"},
+  {name:"Greece",cat:"destination",desc:"Traces of centuries-old history etched in every corner – iconic islands, ancient ruins, and Mediterranean gastronomy.",url:"https://www.sandandseastravel.com/microsite/1083",img:"https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=600&q=80"},
+  {name:"Hawaii",cat:"destination",desc:"There's no place on earth quite like the Hawaiian Islands – six unique islands, six unique experiences.",url:"https://www.sandandseastravel.com/microsite/1084",img:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80"},
+  {name:"Ireland",cat:"destination",desc:"Fill your heart with Ireland – dramatic cliffs, verdant countryside, welcoming pubs, and living Celtic heritage.",url:"https://www.sandandseastravel.com/microsite/1088",img:"https://images.unsplash.com/photo-1564959130747-897fb406b9af?w=600&q=80"},
+  {name:"Israel",cat:"destination",desc:"Explore the land of creation – ancient holy sites, modern Tel Aviv, the Negev desert, and the Dead Sea.",url:"https://www.sandandseastravel.com/microsite/1089",img:"https://images.unsplash.com/photo-1529604278261-8149c97892a9?w=600&q=80"},
+  {name:"Italy",cat:"destination",desc:"Live out your bucket-list dreams – Rome's Colosseum, Venice's canals, Tuscany's vineyards, the Amalfi Coast.",url:"https://www.sandandseastravel.com/microsite/1090",img:"https://images.unsplash.com/photo-1529260830199-42c24126f198?w=600&q=80"},
+  {name:"Japan",cat:"destination",desc:"Surrounded by sea, Japan blends ancient temples and zen gardens with futuristic cities and magnificent coastlines.",url:"https://www.sandandseastravel.com/microsite/1091",img:"https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&q=80"},
+  {name:"Jordan",cat:"destination",desc:"A land of mesmerizing beauty offering a glimpse into ancient civilizations – Petra, Wadi Rum, and the Dead Sea.",url:"https://www.sandandseastravel.com/microsite/1092",img:"https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=600&q=80"},
+  {name:"Korea",cat:"destination",desc:"Discover the stunning contrasts of Korea – ancient palaces alongside K-pop culture, mountain temples, and street food.",url:"https://www.sandandseastravel.com/microsite/1094",img:"https://images.unsplash.com/photo-1538485399081-7191377e8241?w=600&q=80"},
+  {name:"Las Vegas",cat:"destination",desc:"Las Vegas hotels welcome you into a world where no request is too grand – entertainment, dining, and spectacle.",url:"https://www.sandandseastravel.com/microsite/1095",img:"https://images.unsplash.com/photo-1534430480872-3498386e7856?w=600&q=80"},
+  {name:"Los Cabos",cat:"destination",desc:"Where desert, mountains, and sea converge at the tip of Baja California – world-class sport fishing, golf, and resorts.",url:"https://www.sandandseastravel.com/microsite/1158",img:"https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=600&q=80"},
+  {name:"Manitoba",cat:"destination",desc:"In the heart of Canada, immersive experiences that last a lifetime – polar bear watching, northern lights, and Indigenous culture.",url:"https://www.sandandseastravel.com/microsite/1180",img:"https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=600&q=80"},
+  {name:"Mexican Caribbean",cat:"destination",desc:"A whole world of culture, fun, and relaxation waiting in the Mexican Caribbean – from Cancún to Tulum.",url:"https://www.sandandseastravel.com/microsite/1203",img:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80"},
+  {name:"Monaco",cat:"destination",desc:"Experience the unique hospitality that has made Monaco the premier destination for world travelers – glamour, racing, and the Riviera.",url:"https://www.sandandseastravel.com/microsite/1099",img:"https://images.unsplash.com/photo-1588867702719-969c8ac87a74?w=600&q=80"},
+  {name:"Montreal",cat:"destination",desc:"Creative, cosmopolitan and cutting-edge – Montreal's festivals, gastronomy, bilingual culture, and joie de vivre are irresistible.",url:"https://www.sandandseastravel.com/microsite/1100",img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80"},
+  {name:"Morocco",cat:"destination",desc:"Experience Morocco's fascinating fusion of culture, cuisine, and natural wonders – medinas, Sahara dunes, and Atlas peaks.",url:"https://www.sandandseastravel.com/microsite/1191",img:"https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=600&q=80"},
+  {name:"Nashville",cat:"destination",desc:"No better place to experience music – Music City has something for everyone, from honky-tonks to the Grand Ole Opry.",url:"https://www.sandandseastravel.com/microsite/1165",img:"https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=600&q=80"},
+  {name:"New Brunswick",cat:"destination",desc:"Sprawling vistas, mighty rivers, and great outdoors – New Brunswick gives you space to breathe and natural wonder.",url:"https://www.sandandseastravel.com/microsite/1174",img:"https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=600&q=80"},
+  {name:"New York City",cat:"destination",desc:"Experience New York City again – with something new at every turn, from Broadway to Central Park to world-class museums.",url:"https://www.sandandseastravel.com/microsite/1166",img:"https://images.unsplash.com/photo-1490644658840-3f2e3f8c5625?w=600&q=80"},
+  {name:"New Zealand",cat:"destination",desc:"Mountain vistas, ancient forests, volcanic landscapes, and stunning coastline – all in one astonishing day.",url:"https://www.sandandseastravel.com/microsite/1102",img:"https://images.unsplash.com/photo-1507699622108-4be3abd695ad?w=600&q=80"},
+  {name:"Newfoundland & Labrador",cat:"destination",desc:"Wonderfully exotic and unexpectedly different – icebergs, puffins, Viking history, and off-the-beaten-track adventure.",url:"https://www.sandandseastravel.com/microsite/1176",img:"https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=600&q=80"},
+  {name:"Norway",cat:"destination",desc:"Experience the essence of Norway – spectacular fjords, the Northern Lights, midnight sun, and Viking heritage.",url:"https://www.sandandseastravel.com/microsite/1104",img:"https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=600&q=80"},
+  {name:"Nova Scotia",cat:"destination",desc:"From Yarmouth to Cape Breton and all points between – dramatic coastlines, Celtic culture, and fresh lobster await.",url:"https://www.sandandseastravel.com/microsite/1175",img:"https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=600&q=80"},
+  {name:"Portugal",cat:"destination",desc:"Something for every traveler – Lisbon's trams, Porto's wine cellars, the Algarve's cliffs, and the Azores' volcanoes.",url:"https://www.sandandseastravel.com/microsite/1108",img:"https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=600&q=80"},
+  {name:"Prince Edward Island",cat:"destination",desc:"Canada's smallest province packs a big punch – red sand beaches, Anne of Green Gables, and the finest seafood.",url:"https://www.sandandseastravel.com/microsite/1177",img:"https://images.unsplash.com/photo-1507699622108-4be3abd695ad?w=600&q=80"},
+  {name:"Puerto Rico",cat:"destination",desc:"Feel inspired and tap into all your senses – Old San Juan's colorful streets, bioluminescent bays, and warm beaches.",url:"https://www.sandandseastravel.com/microsite/1161",img:"https://images.unsplash.com/photo-1548574505-5e239809ee19?w=600&q=80"},
+  {name:"Qatar",cat:"destination",desc:"Discover what makes Qatar unique – a dazzling blend of ancient Bedouin heritage and ultra-modern architecture.",url:"https://www.sandandseastravel.com/microsite/1109",img:"https://images.unsplash.com/photo-1573551089778-46a7abc39d9f?w=600&q=80"},
+  {name:"Quebec",cat:"destination",desc:"Québec offers countless unparalleled experiences every season – winter Carnival, summer festivals, and endless gastronomy.",url:"https://www.sandandseastravel.com/microsite/1178",img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80"},
+  {name:"Santa Monica",cat:"destination",desc:"LA's premier beach city – a charming seaside escape with culture, events, and urban amenities on the iconic pier.",url:"https://www.sandandseastravel.com/microsite/1162",img:"https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=600&q=80"},
+  {name:"Saskatchewan",cat:"destination",desc:"A land of contrasts – remote northern lakes, spacious rolling plains, and rugged southern badlands.",url:"https://www.sandandseastravel.com/microsite/1173",img:"https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=600&q=80"},
+  {name:"Saudi Arabia",cat:"destination",desc:"Discover the essence of Saudi Arabia – ancient Nabataean cities, the Red Sea coast, and a culture opening to the world.",url:"https://www.sandandseastravel.com/microsite/1169",img:"https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=600&q=80"},
+  {name:"Scandinavia",cat:"destination",desc:"Plan your next vacation to Scandinavia – fjords, Viking history, design capitals, and the aurora borealis.",url:"https://www.sandandseastravel.com/microsite/1111",img:"https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?w=600&q=80"},
+  {name:"South Africa",cat:"destination",desc:"A destination for explorers – Big Five safaris, the Cape Winelands, Garden Route, and Table Mountain.",url:"https://www.sandandseastravel.com/microsite/1114",img:"https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=600&q=80"},
+  {name:"Spain",cat:"destination",desc:"Fall in love with Spain – Gaudí's Barcelona, flamenco in Seville, tapas culture, and the Camino de Santiago.",url:"https://www.sandandseastravel.com/microsite/1116",img:"https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=600&q=80"},
+  {name:"Sweden",cat:"destination",desc:"You are always close to nature in Sweden – from Stockholm's archipelago to Lapland's midnight sun and reindeer.",url:"https://www.sandandseastravel.com/microsite/1117",img:"https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?w=600&q=80"},
+  {name:"Switzerland",cat:"destination",desc:"Fantastic routes, breathtaking vistas – the Alps, chocolate-box villages, lake cruises, and world-class skiing.",url:"https://www.sandandseastravel.com/microsite/1118",img:"https://images.unsplash.com/photo-1516550893923-42d28e5677af?w=600&q=80"},
+  {name:"Thailand",cat:"destination",desc:"Scenic diversity and ancient traditions, tranquil temples and modern urban excitement – Bangkok to the beaches.",url:"https://www.sandandseastravel.com/microsite/1121",img:"https://images.unsplash.com/photo-1528181304800-259b08848526?w=600&q=80"},
+  {name:"The Florida Keys & Key West",cat:"destination",desc:"World-class fishing, diving, art scene, legendary restaurants, and the most laid-back attitude in America.",url:"https://www.sandandseastravel.com/microsite/1157",img:"https://images.unsplash.com/photo-1548574505-5e239809ee19?w=600&q=80"},
+  {name:"The Islands of Tahiti",cat:"destination",desc:"A mecca of beauty – colorful coral reefs, white sandy beaches, overwater bungalows, and jaw-dropping scenery.",url:"https://www.sandandseastravel.com/microsite/1122",img:"https://images.unsplash.com/photo-1559825481-12a05cc00344?w=600&q=80"},
+  {name:"The Islands of the Bahamas",cat:"destination",desc:"Whatever piques your interest, you can find fun for the whole family in these 700+ islands of turquoise paradise.",url:"https://www.sandandseastravel.com/microsite/1123",img:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80"},
+  {name:"The Nordics",cat:"destination",desc:"An open, welcoming region sharing values of trust, equality, innovation, and sustainability – Norway, Sweden, Denmark, Finland, Iceland.",url:"https://www.sandandseastravel.com/microsite/1167",img:"https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=600&q=80"},
+  {name:"The Philippines",cat:"destination",desc:"Soak up rays and lounge on fine white sands – the Philippines offers 7,000+ islands of tropical adventure.",url:"https://www.sandandseastravel.com/microsite/1124",img:"https://images.unsplash.com/photo-1516912481808-3406841bd33c?w=600&q=80"},
+  {name:"Vancouver",cat:"destination",desc:"Year-round activities – whale watching, skiing Whistler, Stanley Park, world-class dining, and Pacific Rim culture.",url:"https://www.sandandseastravel.com/microsite/1127",img:"https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=600&q=80"},
+  {name:"Victoria, B.C.",cat:"destination",desc:"An island destination beaming with ambiance – English gardens, whale watching, tea culture, and harbor views.",url:"https://www.sandandseastravel.com/microsite/1129",img:"https://images.unsplash.com/photo-1508193638397-1c4234db14d8?w=600&q=80"},
+  {name:"Whistler",cat:"destination",desc:"Nestled between two majestic mountains, Whistler is yours to explore from summer hiking and biking to world-class winter skiing.",url:"https://www.sandandseastravel.com/microsite/1131",img:"https://images.unsplash.com/photo-1516550893923-42d28e5677af?w=600&q=80"},
+  {name:"Yukon",cat:"destination",desc:"Captivating shimmering skies without skyscrapers, endless summer nights, and frontier wilderness at its most raw and beautiful.",url:"https://www.sandandseastravel.com/microsite/1179",img:"https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=600&q=80"},
+
+  // TOURS
+  {name:"Abercrombie & Kent",cat:"tour",desc:"Pioneers of the luxury adventure for 60+ years. The world's undisputed luxury-travel leader on every continent.",url:"https://www.sandandseastravel.com/microsite/1147",img:"https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=600&q=80"},
+  {name:"African Travel, Inc.",cat:"tour",desc:"Dedicated to creating the ultimate African experience – memorable, meaningful, and uniquely yours. Safari specialists.",url:"https://www.sandandseastravel.com/microsite/1188",img:"https://images.unsplash.com/photo-1489392191049-fc10c97e64b6?w=600&q=80"},
+  {name:"Alexander + Roberts",cat:"tour",desc:"Delighting travelers for 75+ years with a \"Never More Than 16 Guests\" guarantee in boutique hotels and intimate restaurants.",url:"https://www.sandandseastravel.com/microsite/1170",img:"https://images.unsplash.com/photo-1452441671381-6196a0ce0f6b?w=600&q=80"},
+  {name:"Avanti Destinations",cat:"tour",desc:"Go where you want. When you want. With the flexibility to savor special moments along the way – independent travel done right.",url:"https://www.sandandseastravel.com/microsite/1032",img:"https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?w=600&q=80"},
+  {name:"Brendan Vacations",cat:"tour",desc:"See through the eyes of the locals – an experience accessible only with Brendan Vacations, Ireland and Britain specialists.",url:"https://www.sandandseastravel.com/microsite/1035",img:"https://images.unsplash.com/photo-1564959130747-897fb406b9af?w=600&q=80"},
+  {name:"CIE Tours",cat:"tour",desc:"Discover Ireland, Scotland, England, Wales, Iceland, and Italy with CIE Tours – locally guided, immersively experienced.",url:"https://www.sandandseastravel.com/microsite/1037",img:"https://images.unsplash.com/photo-1496950866446-3253e1470e8e?w=600&q=80"},
+  {name:"Classic Vacations",cat:"tour",desc:"Classic Vacations brings you to the most exciting destinations with curated luxury packages and unmatched service.",url:"https://www.sandandseastravel.com/microsite/1038",img:"https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=80"},
+  {name:"Club Med",cat:"tour",desc:"Premium all-inclusive vacation packages for families – resort-style experiences worldwide with absolutely no hidden costs.",url:"https://www.sandandseastravel.com/microsite/1039",img:"https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&q=80"},
+  {name:"Collette",cat:"tour",desc:"Choosing Collette comes with benefits that take your guided travel experience to another level – since 1918.",url:"https://www.sandandseastravel.com/microsite/1199",img:"https://images.unsplash.com/photo-1452441671381-6196a0ce0f6b?w=600&q=80"},
+  {name:"Globus",cat:"tour",desc:"Just the right balance of included features – Local Favorites, VIP access at must-see sites, and meaningful free time.",url:"https://www.sandandseastravel.com/microsite/1043",img:"https://images.unsplash.com/photo-1529260830199-42c24126f198?w=600&q=80"},
+  {name:"Goway",cat:"tour",desc:"Unforgettable tailor-made experiences to the world's most exotic destinations on all 7 continents for any budget.",url:"https://www.sandandseastravel.com/microsite/1164",img:"https://images.unsplash.com/photo-1528181304800-259b08848526?w=600&q=80"},
+  {name:"Insight Vacations",cat:"tour",desc:"Expertly crafted journeys that make dreams of incredible experiences a reality – premium guided travel worldwide.",url:"https://www.sandandseastravel.com/microsite/1044",img:"https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=600&q=80"},
+  {name:"Micato Safaris",cat:"tour",desc:"Constantly thinking of new ways and new places to see in Africa – Micato is consistently rated the world's #1 safari operator.",url:"https://www.sandandseastravel.com/microsite/1046",img:"https://images.unsplash.com/photo-1489392191049-fc10c97e64b6?w=600&q=80"},
+  {name:"MT Sobek",cat:"tour",desc:"Where adventure travel began – Mountain Travel Sobek is the #1 choice for active travel and award-winning adventures since 1969.",url:"https://www.sandandseastravel.com/microsite/1181",img:"https://images.unsplash.com/photo-1451440063999-77a8b2960d2b?w=600&q=80"},
+  {name:"Rocky Mountaineer",cat:"tour",desc:"See yourself aboard the award-winning Rocky Mountaineer train – an indescribable journey through the Canadian Rockies.",url:"https://www.sandandseastravel.com/microsite/1049",img:"https://images.unsplash.com/photo-1508193638397-1c4234db14d8?w=600&q=80"},
+  {name:"Ski.com",cat:"tour",desc:"Customized all-inclusive ski vacation packages – lodging, lift tickets, flights, rentals, lessons, and more.",url:"https://www.sandandseastravel.com/microsite/1144",img:"https://images.unsplash.com/photo-1516550893923-42d28e5677af?w=600&q=80"},
+  {name:"Swain Destinations",cat:"tour",desc:"A journey with Swain Destinations is more than a vacation – it's a total travel experience in the South Pacific and Asia.",url:"https://www.sandandseastravel.com/microsite/1050",img:"https://images.unsplash.com/photo-1559825481-12a05cc00344?w=600&q=80"},
+  {name:"Tauck",cat:"tour",desc:"World leader in upscale guided travel since 1925 – 150+ land tours, safaris, river and ocean cruises across 70+ countries.",url:"https://www.sandandseastravel.com/microsite/1145",img:"https://images.unsplash.com/photo-1452441671381-6196a0ce0f6b?w=600&q=80"},
+  {name:"TCS World Travel",cat:"tour",desc:"Nearly 30 years enriching lives through all-inclusive private jet expeditions and custom itineraries to extraordinary places.",url:"https://www.sandandseastravel.com/microsite/1155",img:"https://images.unsplash.com/photo-1544982503-9f984c14501a?w=600&q=80"},
+  {name:"Trafalgar",cat:"tour",desc:"Unique insider experiences with the perfect balance of free time across 250+ guided vacations on every continent.",url:"https://www.sandandseastravel.com/microsite/1052",img:"https://images.unsplash.com/photo-1529260830199-42c24126f198?w=600&q=80"},
+  {name:"Travel Answers",cat:"tour",desc:"Unparalleled expertise in the South Pacific, Australia, New Zealand, Africa, and Asia – tailor-made itineraries for curious travelers.",url:"https://www.sandandseastravel.com/microsite/1182",img:"https://images.unsplash.com/photo-1507699622108-4be3abd695ad?w=600&q=80"},
+
+  // THEMED
+  {name:"Benefits of a Travel Advisor",cat:"themed",desc:"Your inspiration. Our passion. Discover why working with a travel advisor transforms good trips into unforgettable journeys.",url:"https://www.sandandseastravel.com/microsite/1202",img:"https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&q=80"},
+  {name:"Celebrations",cat:"themed",desc:"Benefit from firsthand experience and insider connections for a celebration vacation of a lifetime – anniversaries, birthdays, milestones.",url:"https://www.sandandseastravel.com/microsite/1134",img:"https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600&q=80"},
+  {name:"Cruise Benefits",cat:"themed",desc:"Shipboard credits, prepaid gratuities, cocktail events, and behind-the-scenes access when you reserve your voyage with us.",url:"https://www.sandandseastravel.com/microsite/1185",img:"https://images.unsplash.com/photo-1578894381163-e72c17f2d45f?w=600&q=80"},
+  {name:"Culinary Travel",cat:"themed",desc:"With seasoned expertise, we craft one-of-a-kind immersive culinary experiences – cooking classes, wine tours, chef dinners.",url:"https://www.sandandseastravel.com/microsite/1136",img:"https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80"},
+  {name:"Exploration",cat:"themed",desc:"Destinations stay the same, but experiences vary. Let us help you find the perfect adventure off the beaten path.",url:"https://www.sandandseastravel.com/microsite/1133",img:"https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=600&q=80"},
+  {name:"Family Travel",cat:"themed",desc:"We help create one-of-a-kind travel experiences to suit your family's needs – for every age, every interest.",url:"https://www.sandandseastravel.com/microsite/1138",img:"https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=600&q=80"},
+  {name:"Groups",cat:"themed",desc:"Our travel expertise is unmatched, and our negotiated group rates and exclusive benefits are unbeatable.",url:"https://www.sandandseastravel.com/microsite/1139",img:"https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80"},
+  {name:"Guided Vacations",cat:"themed",desc:"Guided vacations take care of every detail so your only job is to show up and explore – worry-free travel at its best.",url:"https://www.sandandseastravel.com/microsite/1204",img:"https://images.unsplash.com/photo-1452441671381-6196a0ce0f6b?w=600&q=80"},
+  {name:"Hotels & Resorts",cat:"themed",desc:"Enjoy valuable privileges at over 1,100 of the finest hotels worldwide – Virtuoso benefits only available through us.",url:"https://www.sandandseastravel.com/microsite/1140",img:"https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=80"},
+  {name:"LGBTQ+ Travel",cat:"themed",desc:"Safe and welcoming destinations, inclusive accommodations, and accepting communities – let's co-create your next vacation.",url:"https://www.sandandseastravel.com/microsite/1186",img:"https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80"},
+  {name:"Luxury Travel",cat:"themed",desc:"What defines an ultimate experience? Anything that elevates your journey from great to once in a lifetime.",url:"https://www.sandandseastravel.com/microsite/1141",img:"https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&q=80"},
+  {name:"Positive Impact Travel",cat:"themed",desc:"Let's make a positive impact on the communities and natural environments we visit around the globe together.",url:"https://www.sandandseastravel.com/microsite/1183",img:"https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=600&q=80"},
+  {name:"River Cruising",cat:"themed",desc:"When you're on the river, you'll travel to the very heart of a region – Europe, Asia, Africa, and the Americas.",url:"https://www.sandandseastravel.com/microsite/1142",img:"https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=600&q=80"},
+  {name:"Romance",cat:"themed",desc:"Indulge in a romantic escape where every moment is tailored to create an unforgettable experience for you and your loved one.",url:"https://www.sandandseastravel.com/microsite/1192",img:"https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&q=80"},
+  {name:"Solo Travel",cat:"themed",desc:"A rewarding way to experience the world – solo travel tailored to keep you safe, connected, and inspired.",url:"https://www.sandandseastravel.com/microsite/1189",img:"https://images.unsplash.com/photo-1507699622108-4be3abd695ad?w=600&q=80"},
+  {name:"Wellness Travel",cat:"themed",desc:"Welcome to wellness travel – where the journey itself is a path to renewal, rejuvenation, and restoration.",url:"https://www.sandandseastravel.com/microsite/1193",img:"https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=600&q=80"},
+
+  // OTHER
+  {name:"Magazine Bookcase",cat:"other",desc:"Catch up on recent magazines featuring our favorite places around the world – curated travel inspiration to spark your next adventure.",url:"https://www.sandandseastravel.com/microsite/1194",img:"https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&q=80"},
+  {name:"Through Indigenous Eyes",cat:"other",desc:"Canada is home to over 700 unique Indigenous communities – experience the land, culture, and stories through Indigenous eyes.",url:"https://www.sandandseastravel.com/microsite/1",img:"https://images.unsplash.com/photo-1508193638397-1c4234db14d8?w=600&q=80"},
+];
+
+const SECTION_ORDER = ['cruise','destination','tour','themed','other'];
+const SECTION_LABELS = {cruise:'Cruise Lines', destination:'Destinations', tour:'Tours & Experiences', themed:'Themed Travel', other:'Special Features'};
+
+let activeFilter = 'all';
+let searchVal = '';
+
+function setFilter(cat, btn) {
+  activeFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function filterCards() {
+  searchVal = document.getElementById('searchInput').value.toLowerCase();
+  render();
+}
+
+function matchesFilter(v) {
+  const catMatch = activeFilter === 'all' || v.cat === activeFilter;
+  const searchMatch = !searchVal || v.name.toLowerCase().includes(searchVal) || v.desc.toLowerCase().includes(searchVal) || v.cat.toLowerCase().includes(searchVal);
+  return catMatch && searchMatch;
+}
+
+function updateCounts() {
+  const cats = ['all','cruise','destination','tour','themed','other'];
+  cats.forEach(cat => {
+    const count = cat === 'all'
+      ? VENDORS.filter(v => !searchVal || v.name.toLowerCase().includes(searchVal) || v.desc.toLowerCase().includes(searchVal)).length
+      : VENDORS.filter(v => v.cat === cat && (!searchVal || v.name.toLowerCase().includes(searchVal) || v.desc.toLowerCase().includes(searchVal))).length;
+    const el = document.getElementById('cnt-' + cat);
+    if (el) el.textContent = count;
+  });
+}
+
+function cardHTML(v) {
+  return `<a class="card" href="${v.url}" target="_blank" rel="noopener">
+    <div class="card-image">
+      <img src="${v.img}" alt="${v.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="img-fallback" style="display:none">${v.name}</div>
+      <span class="cat-pill">${v.cat === 'other' ? 'Featured' : v.cat.charAt(0).toUpperCase() + v.cat.slice(1)}</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">${v.name}</div>
+      <div class="card-desc">${v.desc}</div>
+      <span class="card-cta">
+        Explore
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </span>
+    </div>
+  </a>`;
+}
+
+function render() {
+  updateCounts();
+  const content = document.getElementById('mainContent');
+  let html = '';
+  let totalShown = 0;
+
+  if (activeFilter === 'all') {
+    SECTION_ORDER.forEach(cat => {
+      const items = VENDORS.filter(v => v.cat === cat && matchesFilter(v));
+      if (!items.length) return;
+      totalShown += items.length;
+      html += `<div class="section-header"><h2>${SECTION_LABELS[cat]}</h2><div class="rule"></div><span class="section-count">${items.length} partners</span></div>`;
+      html += `<div class="grid">${items.map(cardHTML).join('')}</div>`;
+    });
+  } else {
+    const items = VENDORS.filter(v => matchesFilter(v));
+    totalShown = items.length;
+    if (items.length) {
+      html += `<div class="section-header"><h2>${SECTION_LABELS[activeFilter] || 'Results'}</h2><div class="rule"></div><span class="section-count">${items.length} partners</span></div>`;
+      html += `<div class="grid">${items.map(cardHTML).join('')}</div>`;
+    }
+  }
+
+  if (!totalShown) {
+    html = `<div class="grid"><div class="no-results"><p>No results found for "${searchVal}"</p></div></div>`;
+  }
+
+  content.innerHTML = html;
+}
+
+render();
+</script>
+</body>
+</html>
